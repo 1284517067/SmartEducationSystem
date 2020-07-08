@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.js">  </script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/action.js"></script>
+    <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.css">
+</head>
+<script th:inline="javascript">
+    function toastMsg() {
+        let flag = '[[${hasMsg}]]';
+        if (flag == true)
+        {
+            alert("'[[${msg}]]'");
+        }
+    }
+</script>
+<body>
+    <div class="container-fluid" th:fragment="header" >
+
+        <div class="container-fluid" onload="toastMsg()">
+            <nav class="navbar navbar-expand-sm bg-white navbar-dark row">
+                <a class="navbar-brand col-2 offset-1 align-content-center text-muted">Logo</a>
+                <ul class="navbar-nav col-3">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-muted" href="#" id="navbarMajor" data-toggle="dropdown">
+                            课程
+                        </a>
+                        <div class="dropdown-menu">
+                            <div th:each="major:${majors}">
+                                <a class="dropdown-item" href="#" th:text="${major}"></a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">学校</a>
+                    </li>
+                </ul>
+                <div class="ml-xl-3">
+                    <form method="post" action="/search">
+                        <div class="input-group ">
+                            <input type="text" class="form-control" id="search_text" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" id="search_submit" type="submit"><span class="fa fa-search fa-fw mx-auto" id="search_icon" aria-hidden="true"></span> </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="ml-auto col-2 navbar-dark">
+                    <div th:if="${session.user}">
+                        <a class='text-white-50' th:text="'您好，'+${session.user.name}">您好, 用户</a>
+                        <div class="text-white-50 " style="display: inline">|</div>
+                        <a class="text-white-50" href="/login/logout">退出登录</a>
+                    </div>
+                    <div th:unless="${session.user}">
+                        <a class="text-muted" href="/login">登录</a>
+                        <div class="text-muted " style="display: inline">|</div>
+                        <a class="text-muted" href="/register">注册</a>
+                    </div>
+                </div>
+
+            </nav>
+        </div>
+
+    </div>
+</body>
+</html>

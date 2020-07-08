@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>jQuery酒店类入住日期时间范围选择器插件|DEMO_jQuery之家-自由分享jQuery、html5、css3的插件库</title>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" /><!--CSS RESET-->
+	<link rel="stylesheet" type="text/css" href="css/htmleaf-demo.css"><!--演示页面样式，使用时可以不引用-->
+	<link rel="stylesheet" href="css/t-datepicker.min.css">
+	<!-- <link rel="stylesheet" href="css/t-datepicker-v1.0.0.css"> -->
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/theme-main.css">
+	<!-- <link rel="stylesheet" href="css/t-datepicker-main.css"> -->
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/t-datepicker.min.js"></script>
+	<!-- <script type="text/javascript" src="js/t-datepicker-v1.0.0.js"></script> -->
+	<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		// Toggle button view more
+		$('.block-view-more .btn').on('click', function(){
+			if ( $(this).text() !== 'Show content >>' ) {
+				$(this).text('Show content >>')
+			} else {
+				$(this).text('Hide content >>')
+			}
+			$(this).next().slideToggle('slow')
+		})
+		// Scroll side-bar with body
+		var body = $("html, body");
+		$('.sider-bar .item').on('click', function(){
+			$(this).parents('.sider-bar').find('.active').removeClass('active');
+			$(this).parent().addClass('active');
+			var getTop = $('#'+$(this).attr('title'))
+			$('.block-title').removeClass('active')
+			getTop.find('.block-title').addClass('active')
+			body.animate(
+				{scrollTop: getTop.position().top}, 500
+			);
+		})
+		// Get link location window with nav-list
+		if ( $('[data-js="get-part"]').length !== 0 ) {
+			var get_href = $('[data-js="get-part"] .item')
+			get_href.each( function(e) {
+				var a = $(this).attr('href')
+				if ( window.location.pathname === '/' && a.indexOf('index') !== -1 ) { // indexOf === -1 false
+					return $(this).addClass('active')
+				}
+				if ( a.indexOf(window.location.pathname) !== -1 && window.location.pathname !== '/' ) {
+					$(this).addClass('active')
+				}
+			})
+		}
+		$('.amp_pre').append('<button class="btn-copy">Copy</button>')
+		$('.btn-copy').on('click', function(){
+			var cl_amp_pre = $(this).parents('.amp_pre');
+			cl_amp_pre.addClass('amp_pre_active')
+			$(this).text('');
+			setTimeout(function(){
+				$('.amp_pre_active').removeClass('amp_pre_active')
+				$('.btn-copy').text('Copy');
+			}, 750)
+			if ( cl_amp_pre.find('.copy-code').length !== 0 ) {
+				$('.copy-code').remove()
+			}
+			cl_amp_pre.append('<textarea class="copy-code" cols="30" rows="10"></textarea>')
+			$('.copy-code').val(cl_amp_pre.text())
+			copyToClipboard('.copy-code')
+		})
+
+		function copyToClipboard(el) {
+		    // resolve the element
+		    el = (typeof el === 'string') ? document.querySelector(el) : el;
+
+		    // handle iOS as a special case
+		    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+
+		        // save current contentEditable/readOnly status
+		        var editable = el.contentEditable;
+		        var readOnly = el.readOnly;
+
+		        // convert to editable with readonly to stop iOS keyboard opening
+		        el.contentEditable = true;
+		        el.readOnly = true;
+
+
+		        // create a selectable range
+		        var range = document.createRange();
+		        range.selectNodeContents(el);
+
+		        // select the range
+		        var selection = window.getSelection();
+		        selection.removeAllRanges();
+		        selection.addRange(range);
+		        el.setSelectionRange(0, 999999);
+
+		        // restore contentEditable/readOnly to original state
+		        el.contentEditable = editable;
+		        el.readOnly = readOnly;
+		    }
+		    else {
+		        el.select();
+		    }
+
+		    // execute copy command
+		    document.execCommand('copy');
+		}
+		$('.item').on('touchstart', function(e) {
+			$(this).off('hover')
+		})
+	})
+</script>
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<script type="text/javascript">
+	// Test formatDate withm setDateCheckIn, dateCheckOut
+	$(document).ready( function() {
+
+		var holiDays = {
+			'2018-01-01' : 'New Years is Day',
+			'2018-06-20' : 'Columbus Day',
+			'2018-07-10' : 'Columbus Day',
+			'2018-07-25' : 'Christmas'
+		};
+
+		$(".t-show-3").tDatePicker({
+			// fnDataEvent     : holiDays,
+			// numCalendar     : 2,
+			// limitNextMonth  : 2,
+			// startDate       : '2018-07-20',
+			// limitDateRanges : 31,
+			// limitNextMonth  : 2,
+			// iconArrowTop : true,
+			// startDate       : '2018-07-20',
+			// endDate       : '2018-09-28',
+			// limitDateRanges : 80,
+			// showFullDateRanges: true,
+			// titleDateRanges: 'tuds',
+
+			// Test full limit dateTime
+			// limitDateRanges    : 5,
+			// showFullDateRanges : true,
+			// titleDateRange     : 'day',
+			// titleDateRanges    : 'days',
+			// dateCheckIn        : '2018/06/27',
+
+			// dateCheckIn  : '2018/07/20',
+			// dateCheckOut : '2018/07/29',
+
+			// Test end, start Date
+			// startDate       : '2018/04/02',
+			// endDate         : '2018/07/03',
+
+			// Test highlighted ngày hiển thị
+			// toDayHighlighted   : true,  // true|false
+			// setToDayHighlighted   : false,  // true|false
+			// nextDayHighlighted   : true,  // true|false
+			// setNextDayHighlighted   : false,  // true|false
+
+			// formatDate   : 'yyyy-mm-dd',
+			// formatDate   : 'yyyy-dd-mm',
+			// formatDate   : 'dd-mm-yyyy',
+			// formatDate   : 'mm-dd-yyyy',
+			// dateCheckIn  : '29/06/2018',
+			// dateCheckOut  : '20/07/2018',
+			// endDate         : '30/06/2018',
+
+			// formatDate   : 'yyyy-mm-dd',
+			// dateCheckIn  : '2018/07/12',
+			// dateCheckOut  : '2018/08/10',
+			// setDateCheckIn  : new Date(2018,05,25),
+			// dateCheckOut  : new Date(2018,05,30),
+			// dateCheckOut : '2018/07/28',
+			// dateCheckOut : '2018/07/20',
+			// startDate    : '2018/06/20',
+
+			// formatDate  : 'yyyy-dd-mm',
+			// setDateCheckIn: '2018/30/06',
+			// dateCheckOut: '2018/30/07',
+			
+
+			// formatDate   : 'dd-mm-yyyy',
+			// setDateCheckIn  : '30/06/2018',
+			// dateCheckOut : '30/07/2018',
+			
+			
+			// formatDate   : 'mm-dd-yyyy',
+			// setDateCheckIn  : '06/30/2018',
+			// dateCheckOut : '07/30/2018',
+
+
+			// options setStartDate
+			// setStartDate      : '01/01/2019',
+			// setDateCheckIn    : '01/02/2019',
+			// setStartDate    : '15/06/2018',
+			// setStartDate    : '06/15/2018',
+		})
+
+		// Test events
+		.on('clickDateCI', function(e, dateCI) {
+			// console.log('clickDateCI do something')
+		    // console.log(dateCI)
+		})
+		.on('clickDateCO', function(e, dateCO) {
+		    // console.log('clickDateCO do something')
+		    // console.log(dateCO)
+		})
+		.on('beforeShowDay', function() {
+		    // console.log('beforeShowDay do something')
+		})
+		.on('afterShowDay', function(){
+		    // console.log('afterShowDay do something')
+		})
+		.on('toggleAfterHideDay', function(){
+		    // console.log('toggleAfterHideDay do something')
+		})
+		.on('afterCheckOut', function(e, dataDate){
+		    // console.log('afterCheckOut do something')
+		    // console.log(dataDate)
+		    // console.log(dataDate[0], dataDate[1])
+		})
+		.on('eventClickDay', function(e, dataDate) {
+		    // console.log('eventClickDay do something')
+		    // console.log(dataDate)
+		})
+		.on('selectedCI', function(e, slDateCI) {
+		    // console.log('selectedCI do something')
+		    // console.log(slDateCI)
+		})
+		.on('selectedCO', function(e, slDateCO) {
+		    // console.log('selectedCO do something')
+		    // console.log(slDateCO)
+		})
+		.on('onChangeCI', function(e, changeDateCI) {
+		    // console.log('changeDateCI do something')
+		    // console.log(changeDateCI)
+		})
+		.on('onChangeCO', function(e, changeDateCO) {
+		    // console.log('changeDateCO do something')
+		    // console.log(changeDateCO)
+		})
+	})
+	
+
+	$(document).ready(function(){
+
+		// Flow update có thể cho bạn qui định lại ngày check-in, check-out của calendar.
+		// But, nó còn lệ thuộc vào một số options và methods setStartDate, limitDateRanges
+
+		// Methods Update define, reset new date check-in and check-out of date calendar.
+		// But, it also dependencies on some follow options và methods setStartDate, limitDateRanges
+		// These are examples that you can make follow:
+
+		// 1. Update trong giới hạn Limit 31 ngày với startDate
+		// CI < CO && < startDate default
+		// $(".t-datepicker").tDatePicker('update', ['2018-06-29', '2018-06-30'])
+		// CI < CO default > startDate
+		// $(".t-datepicker").tDatePicker('update', ['2018-07-29', '2018-07-30'])
+		// CI > CO && > startDate lấy CO, CI = startDate
+		// $(".t-datepicker").tDatePicker('update', ['2018-07-29', '2018-07-28'])
+		// CI = '', chỉ update CO, CI auto set toDay
+		// $(".t-datepicker").tDatePicker('update', ['', '2018-07-29'])
+		// $(".t-datepicker").tDatePicker('update', ['2018-07-27', ''])           // CO = '', chi update CI
+
+		// ### 
+		// Update CI Không có CO, CI < limitDateRanges - 31
+		// $(".t-datepicker").tDatePicker('updateCI', '27-06-2018') // CI > startDate CI = CI
+		// $(".t-datepicker").tDatePicker('updateCI', '15-06-2018') // CI < startDate CI = startDate
+
+		// Update CI có CO
+		// $(".t-datepicker").tDatePicker('updateCO', '10-07-2018') 
+		// Nhỏ hơn CO,
+		// $(".t-datepicker").tDatePicker('updateCI', '01-07-2018') // CI < CO => CI = CI, CO = CO
+		// Nhỏ hơn CO và nhỏ hơn setStartDate CI < CO && CI < setStartDate
+		// $(".t-datepicker").tDatePicker('updateCI', '15-06-2018') // => CI = setStartDate, CO = CO
+		// Lớn hơn CO, CI > CO
+		// $(".t-datepicker").tDatePicker('updateCI', '20-07-2018') // CI > CO => CI = CI, CO = null
+
+
+
+		// ###
+		// Update CO không có CI, CO < limitDateRanges - 31
+		// $(".t-datepicker").tDatePicker('updateCO', '10-07-2018') // CO < limitDateRanges => CO = CO, CI = startDate
+		// $(".t-datepicker").tDatePicker('updateCO', '10-06-2018') // CO < setStart => CI = CI, CO = CI+1
+
+		// Update CO có CI, CO < limitDateRanges - 31
+		// $(".t-datepicker").tDatePicker('updateCI', '10-07-2018')
+		// Update CO có CI, CO < limitDateRanges - 31, CI = ''
+		// $(".t-datepicker").tDatePicker('updateCI', '')
+		// CO < CI, 
+		// $(".t-datepicker").tDatePicker('updateCO', '01-07-2018') // => CO = CO, CI = setStartDate
+		// CO < CI, CO < setStartDate,
+		// $(".t-datepicker").tDatePicker('updateCO', '01-06-2018') // CO < setStart => CI = CI, CO = CI+1
+		// CO > CI
+		// $(".t-datepicker").tDatePicker('updateCO', '20-07-2018') // => CO = CO, CI = CI
+
+
+
+		// 2. Update ngoài giới hạn Limit 31 ngày so với ngày startDate
+		// CI < CO && > limitEndDate default
+		// $(".t-datepicker").tDatePicker('update', ['2018-10-20', '2018-10-21']) // CI = CO = endDate
+		// CI < CO && < limitEndDate default
+		// $(".t-datepicker").tDatePicker('update', ['2018-09-20', '2018-09-29']) // CI = CO = endDate
+		// CI < CO && CO > limitEndDate default
+		// $(".t-datepicker").tDatePicker('update', ['', '2018-10-30']) // CI = CO = endDate
+		// $(".t-datepicker").tDatePicker('update', ['2018-09-26', '']) // CI < CO default
+		// $(".t-datepicker").tDatePicker('update', ['01-08-2018', '30-08-2018']) // CI < CO default chưa vượt limitDateRange 31
+		// $(".t-datepicker").tDatePicker('update', ['29-07-2018', '30-08-2018']) // CI < CO nhưng lại vượt quá giới hạn limitDateRanges 31 ngày, nên CI auto setStartDate
+		// $(".t-datepicker").tDatePicker('update', ['29-09-2018', '30-08-2018']) // CI > CO lib sẽ lấy giá trị CO = CO, còn CI thì auto setStartDate vì vượt 31 limit
+		// $(".t-datepicker").tDatePicker('update', ['', '30-08-2018'])           // CI = '', chỉ update CO, CI auto CI = setStartDate - 31
+		// $(".t-datepicker").tDatePicker('update', ['29-08-2018', ''])           // CO = '', chi update CI
+
+
+		// Update CI Không có CO
+		// $(".t-datepicker").tDatePicker('updateCI', '27-08-2018') // CI > limitDateRanges CI = CI
+
+		// Update CI có CO, CO && CI > (setStartDate + limitDateRanges)
+		// CO > limitDateRanges
+		// $(".t-datepicker").tDatePicker('updateCO', '10-08-2018')
+		// CO !== null & CI > limitDateRanges
+		// $(".t-datepicker").tDatePicker('updateCI', '27-08-2018') // => CI = CI
+
+		// Update CO Không có CI, CO && CI > limitDateRanges
+		// CI === null && CO > limitDateRanges
+		// $(".t-datepicker").tDatePicker('updateCO', '10-08-2018') // => auto set CI = limitDateRanges - 31, CO = CO
+
+		// CI !== null & CO > (setStartDate + limitDateRanges)
+		// $(".t-datepicker").tDatePicker('updateCI', '10-08-2018')
+		// CO < CI && CO < limitDateRanges
+		// $(".t-datepicker").tDatePicker('updateCO', '01-08-2018') // => auto set CI = limitDateRanges - 31, CO = CO
+		// CO === CI && CO < limitDateRanges
+		// $(".t-datepicker").tDatePicker('updateCO', '10-08-2018') // => CI = CO
+		// CO > CI && CO < limitDateRanges
+		// $(".t-datepicker").tDatePicker('updateCO', '20-08-2018') // => CI = CI, CO = CO
+		// CO > CI && CO > limitDateRanges
+		// $(".t-show-1").tDatePicker('updateCI', '2018-07-29') // => auto set CI = limitDateRanges, CO = CO
+		// $(".t-show-1").tDatePicker('updateCI', '2018-10-29') // => auto set CI = limitDateRanges, CO = CO
+		// $(".t-show-1").tDatePicker('updateCO', '2018-07-29') // => auto set CI = limitDateRanges, CO = CO
+		// $(".t-show-1").tDatePicker('updateCO', '2018-10-29') // => auto set CI = limitDateRanges, CO = CO
+		// $(".t-show-1").tDatePicker('show')
+
+
+		// Clear updateCI, updateCO, update
+		// $(".t-datepicker").tDatePicker('update', '')             // CI = null && CO = null
+		// $(".t-datepicker").tDatePicker('updateCI', '')           // CI = '' clear date CI = null
+		// $(".t-datepicker").tDatePicker('updateCO', '')           // CO = '' clear date CO = null
+
+		// $('.t-datepicker').tDatePicker('setStartDate', '2018-07-17')
+		// $('.t-datepicker').tDatePicker('setStartDate', '2018-07-17')
+		// $('.t-datepicker').tDatePicker('setEndDate', '2018-12-30')
+
+		// Test show calendar
+		$('#click').on('click', function(e) {
+			$(".t-show-1").tDatePicker('show')
+		})
+
+		// Show calendar
+		// $(".t-show-1").tDatePicker('show')
+
+		// test getDate ....
+		$('#click_1').on('click', function(e) {
+			// $(".t-datepicker").tDatePicker('update', ['20-08-2018', '25-08-2018'])
+			// $(".t-datepicker").tDatePicker('show')
+
+			// var a = $(".t-datepicker").tDatePicker('getDate')
+			// var b = $(".t-datepicker").tDatePicker('getDateInput')
+			// var c = $(".t-datepicker").tDatePicker('getDateUTC')
+
+			// var a = $(".t-datepicker").tDatePicker('getDates')
+			// var b = $(".t-datepicker").tDatePicker('getDateInputs')
+			// var c = $(".t-datepicker").tDatePicker('getDateUTCs')
+
+			// var d = $(".t-datepicker").tDatePicker('getStartDate')
+			// var f = $(".t-datepicker").tDatePicker('getStartDateUTC')
+			var g = $(".t-datepicker").tDatePicker('getEndDate')
+			// var h = $(".t-datepicker").tDatePicker('getEndDateUTC')
+
+			// console.log(a)
+			// console.log(b)
+			// console.log(c)
+
+			// console.log(d)
+			// console.log(f)
+			console.log(g)
+			// console.log(h)
+
+			// $(".t-show-1").tDatePicker('hide')
+		})
+
+	});
+</script>
+
+	<!-- master tool only -->
+    <script type="application/ld+json">
+      {
+          "@context" : "https://schema.org",
+          "@type": "WebPage",
+          "url" : "https://t-datepicker.getqwerty.com/demos.html",
+          "name": "t-datepicker",
+          "alternateName": "t-datepicker",
+          "author": {
+              "@type": "Person",
+              "name": "Tu Truong"
+              "url": "https://twitter.com/mtu_truong"
+          },
+          "description":"This is demo pages, you can choose checkbox, click button update demo page will show you function have value each option.",
+          "image": {
+              "@type": "ImageObject",
+              "width": 256,
+              "height": 256,
+              "url": "https://t-datepicker.getqwerty.com/theme/images/about-t-datepicker.png"
+          },
+          "creator": ["Tu Truong"],
+          "sameAs": ["https://www.facebook.com/tudscss",
+          "https://plus.google.com/u/0/111272361722398364018",
+          "https://twitter.com/mtu_truong",
+          "https://www.youtube.com/channel/UCDACe-7BFGDucQoxTDfPotw"],
+          "keywords": ["t-datepicker", "datepicker", "two datepicker", "bootstrap-datepicker", "getqwerty", "qwerty", "converthtml", "t-scroll"]
+      }
+    </script>
+</head>
+<body>
+	<div class="htmleaf-container">
+		<header class="htmleaf-header">
+			<h1>jQuery酒店类入住日期时间范围选择器插件 <span>A jQuery Check-in And Check-out Date Range Picker </span></h1>
+			<div class="htmleaf-links">
+				<a class="htmleaf-icon icon-htmleaf-home-outline" href="http://www.htmleaf.com/" title="jQuery之家" target="_blank"><span> jQuery之家</span></a>
+				<a class="htmleaf-icon icon-htmleaf-arrow-forward-outline" href="http://www.htmleaf.com/jQuery/Calendar-Date-Time-picker/201807145226.html" title="返回下载页" target="_blank"><span> 返回下载页</span></a>
+			</div>
+		</header>
+		<div class="auto-colors">
+			<button class="btn btn-toggle">&#x276E;</button>
+			<!-- <button class="btn btn-toggle">&#x276F;</button> -->
+			<button class="btn btn-change-color" data-title="theme-blue.css" title="theme-blue"></button>
+			<button class="btn btn-change-color" data-title="theme-bluegrey.css" title="theme-bluegrey"></button>
+			<button class="btn btn-change-color" data-title="theme-cyan.css" title="theme-cyan"></button>
+
+			<button class="btn btn-change-color" data-title="theme-green.css" title="theme-green"></button>
+			<button class="btn btn-change-color" data-title="theme-lime.css" title="theme-lime"></button>
+			<button class="btn btn-change-color" data-title="theme-orange.css" title="theme-orange"></button>
+
+			<button class="btn btn-change-color" data-title="theme-purple.css" title="theme-purple"></button>
+			<button class="btn btn-change-color" data-title="theme-teal.css" title="theme-teal"></button>
+			<button class="btn btn-change-color" data-title="theme-yellow.css" title="theme-yellow"></button>
+
+			<button class="btn btn-block btn-change-color" data-title="theme-main.css" title="theme-main"></button>
+			<button class="btn btn-block btn-main auto-slider">Auto Slider</button>
+		</div>
+		<script type="text/javascript">
+$(document).ready( function() {
+	// $('link')
+	function changeStyle(pr_el) {
+		var a = 1;
+		var link_href;
+		pr_el.each( function(){
+			link_href = $(this).attr('href');
+			if ( link_href.indexOf('theme-') !== -1 ) {
+				switch(link_href) {
+					// theme-main
+					case link_href = 'css/theme-main.css':
+					link_href = link_href.replace('theme-main', 'theme-blue')
+					break;
+
+					// theme-blue
+					case link_href = './theme/css/layout-theme/theme-blue.css':
+					link_href = link_href.replace('theme-blue', 'theme-bluegrey')
+					break;
+
+					// theme-bluegrey
+					case link_href = './theme/css/layout-theme/theme-bluegrey.css':
+					link_href = link_href.replace('theme-bluegrey', 'theme-cyan')
+					break;
+
+					// theme-cyan
+					case link_href = './theme/css/layout-theme/theme-cyan.css':
+					link_href = link_href.replace('theme-cyan', 'theme-green')
+					break;
+
+					// theme-green
+					case link_href = './theme/css/layout-theme/theme-green.css':
+					link_href = link_href.replace('theme-green', 'theme-lime')
+					break;
+
+					// theme-lime
+					case link_href = './theme/css/layout-theme/theme-lime.css':
+					link_href = link_href.replace('theme-lime', 'theme-orange')
+					break;
+
+					// theme-orange
+					case link_href = './theme/css/layout-theme/theme-orange.css':
+					link_href = link_href.replace('theme-orange', 'theme-purple')
+					break;
+
+					// theme-purple
+					case link_href = './theme/css/layout-theme/theme-purple.css':
+					link_href = link_href.replace('theme-purple', 'theme-teal')
+					break;
+
+					// theme-teal
+					case link_href = './theme/css/layout-theme/theme-teal.css':
+					link_href = link_href.replace('theme-teal', 'theme-yellow')
+					break;
+
+					// theme-yellow
+					case link_href = './theme/css/layout-theme/theme-yellow.css':
+					link_href = link_href.replace('theme-yellow', 'theme-main')
+				}
+				$(this).attr('href', link_href)
+
+				// click add style and stop auto slide color
+				$('.btn-change-color').on('click', function(){
+					a = 2
+				})
+			}
+		});
+		
+		setTimeout(function(){
+			if ( a === 1 ) {
+				changeStyle($('link'))
+			}
+		}, 3000)
+	}
+	function offSlider(pr_el) {
+		pr_el.each( function(){
+			var link_href = $(this).attr('href');
+			var _this = $(this)
+			// setThem follow date of week
+			if ( link_href.indexOf('theme-') !== -1 ) {
+				switch(new Date().getDay()) {
+					// theme-blue
+					case 0:
+					$(this).attr('href', './theme/css/layout-theme/theme-blue.css')
+					break;
+
+					// theme-blue
+					case 1:
+					$(this).attr('href', './theme/css/layout-theme/theme-orange.css')
+					break;
+
+					// theme-bluegrey
+					case 2:
+					$(this).attr('href', './theme/css/layout-theme/theme-teal.css')
+					break;
+
+					// theme-cyan
+					case 3:
+					$(this).attr('href', './theme/css/layout-theme/theme-cyan.css')
+					break;
+
+					// theme-lime
+					case 4:
+					$(this).attr('href', './theme/css/layout-theme/theme-green.css')
+					break;
+
+					// theme-main
+					case 5:
+					$(this).attr('href', 'css/theme-main.css')
+					break;
+
+					// theme-orange
+					case 6:
+					$(this).attr('href', './theme/css/layout-theme/theme-purple.css')
+					break;
+				}
+				$('.btn-change-color').on('click', function(){
+					var data_title = $(this).attr('data-title')
+					tuds = link_href.slice(link_href.search('theme-'), link_href.length)
+					data_title = link_href.replace(tuds, data_title)
+					_this.attr('href', data_title)
+				})
+			}
+		})
+	}
+	// Change color selector
+	offSlider($('link'));
+	
+	// changeStyle($('link')); Auto slider
+	$('.auto-slider').on('click', function(){
+		changeStyle($('link'));
+	});
+
+	$('.btn-toggle').on('click', function(){
+		if ( $(this).text() === '❮' ) {
+			$(this).html( '&#x276F;' )
+			$(this).parents('.auto-colors').css('right', 0)
+		} else {
+			$(this).html( '&#x276E;' )
+			$(this).parents('.auto-colors').css('right', -130+'px')
+		}
+	})
+
+})
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.btn-navigation').on('click', function(){
+			$('.navbar-list').slideToggle(300)
+			$('.sider-bar').slideUp(300)
+			setTimeout(function(){
+				$('.navbar').removeClass('nav-open-toggle')
+			}, 300)
+			if ( $('.nav-open').length === 0 ) {
+				$('.navbar').addClass('nav-open')
+				$('body').addClass('open')
+			} else {
+				setTimeout( function() {
+					$('.navbar').removeClass('nav-open')
+					$('body').removeClass('open')
+				}, 310)
+			}
+		})
+		$('.btn-nav-toggle').on('click', function(){
+			$('.navbar-list').slideUp(300)
+			$('.sider-bar').slideToggle(300)
+			setTimeout(function(){
+				$('.navbar').removeClass('nav-open')
+			}, 300)
+			if ( $('.nav-open-toggle').length === 0 ) {
+				$('.navbar').addClass('nav-open-toggle')
+				$('body').addClass('open')
+			} else {
+				setTimeout(function(){
+					$('.navbar').removeClass('nav-open-toggle')
+					$('body').removeClass('open')
+				}, 300)
+			}
+		})
+		// Target clone menu && sider-bar
+		$('html').on('click', function(e){
+			if ( $('body').hasClass('open') ) {
+				if ( $(e.target).parents('.navbar').length !== 1
+					&& $(e.target).parents('.sider-bar').length !== 1
+					&& $(e.target).hasClass('.navbar') !== true
+					&& $(e.target).hasClass('sider-bar') !== true  ) {
+					$('.navbar-list').slideUp(300)
+					$('.sider-bar').slideUp(300)
+					setTimeout(function(){
+						$('.navbar').removeClass('nav-open-toggle')
+						$('.navbar').removeClass('nav-open')
+						$('body').removeClass('open')
+					}, 300)
+				}
+			}
+		})
+	})
+</script>
+<div class="container">
+		<div class="container-right">
+			<div class="sider-bar" id="ps_scroll">
+				<div class="form-include">
+					<h2>Select Checkbox</h2>
+<div class="form-group">
+	<a href="#" class="select-cbox">Select All</a>
+	<span>or</span>
+	<a href="#" class="select-cbox">Clear All</a>
+</div>
+<h2>Options Action</h2>
+<div class="form-group">
+	<label class="form-label">autoClose</label>
+	<input type="text" value="false" class="ci_co_autoClose form-control">
+	<input type="checkbox" name="autoClose" class="checkbox" checked="checked">
+	<label for="autoClose" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">durationArrowTop</label>
+	<input type="text" value="200" class="ci_co_durationArrowTop form-control">
+	<input type="checkbox" name="durationArrowTop" class="checkbox" checked="checked">
+	<label for="durationArrowTop" class="checkbox-label"></label>
+</div>
+
+<h2>Options Format</h2>
+<div class="form-group">
+	<label class="form-label">formatDate</label>
+	<input type="text" value="yyyy-mm-dd" class="ci_co_formatDate form-control">
+	<input type="checkbox" name="formatDate" class="checkbox">
+	<label for="formatDate" class="checkbox-label"></label>
+</div>
+
+<h2>Options Date</h2>
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">dateCheckIn</label>
+	<input type="text" value="null" class="ci_co_dateCheckIn form-control">
+	<input type="checkbox" name="dateCheckIn" class="checkbox">
+	<label for="dateCheckIn" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">dateCheckOut</label>
+	<input type="text" value="null" class="ci_co_dateCheckOut form-control">
+	<input type="checkbox" name="dateCheckOut" class="checkbox">
+	<label for="dateCheckOut" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">startDate</label>
+	<input type="text" value="null" class="ci_co_startDate form-control">
+	<input type="checkbox" name="startDate" class="checkbox">
+	<label for="startDate" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">endDate</label>
+	<input type="text" value="null" class="ci_co_endDate form-control">
+	<input type="checkbox" name="endDate" class="checkbox">
+	<label for="endDate" class="checkbox-label"></label>
+</div>
+
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">limitPrevMon...</label>
+	<input type="text" value="0" class="ci_co_limitPrevMonth form-control">
+	<input type="checkbox" name="limitPrevMonth" class="checkbox">
+	<label for="limitPrevMonth" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">limitNextMon...</label>
+	<input type="text" value="11" class="ci_co_limitNextMonth form-control">
+	<input type="checkbox" name="limitNextMonth" class="checkbox">
+	<label for="limitNextMonth" class="checkbox-label"></label>
+</div>
+
+<div class="form-group">
+	<label class="form-label">limitDateRanges</label>
+	<input type="text" value="31" class="ci_co_limitDateRanges form-control">
+	<input type="checkbox" name="limitDateRanges" class="checkbox">
+	<label for="limitDateRanges" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">fnDataEvent</label>
+	<textarea class="ci_co_fnDataEvent form-control">
+'2018-01-01' : 'New Years is Day',
+'2018-07-16' : 'Lorem ipsum ...',
+'2018-08-25' : 'Lorem ipsum ...',
+'2018-09-05' : 'Lorem ipsum ...'
+	</textarea>
+	<input type="checkbox" name="fnDataEvent" class="checkbox" checked="">
+	<label for="fnDataEvent" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">showFullDateRanges</label>
+	<input type="text" value="false" class="ci_co_showFullDateRanges form-control">
+	<input type="checkbox" name="showFullDateRanges" class="checkbox" checked="">
+	<label for="showFullDateRanges" class="checkbox-label"></label>
+</div>
+
+
+<h2>Options Theme</h2>
+<div class="form-group">
+	<label class="form-label">numCalendar</label>
+	<input type="text" value="2" class="ci_co_numCalendar form-control">
+	<input type="checkbox" name="numCalendar" class="checkbox">
+	<label for="numCalendar" class="checkbox-label"></label>
+</div>
+
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">titleCI</label>
+	<input type="text" value="Check In" class="ci_co_titleCI form-control">
+	<input type="checkbox" name="titleCI" class="checkbox">
+	<label for="titleCI" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">titleCO</label>
+	<input type="text" value="Check Out" class="ci_co_titleCO form-control">
+	<input type="checkbox" name="titleCO" class="checkbox">
+	<label for="titleCO" class="checkbox-label"></label>
+</div>
+
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">titleDateRange</label>
+	<input type="text" value="night" class="ci_co_titleDateRange form-control">
+	<input type="checkbox" name="titleDateRange" class="checkbox">
+	<label for="titleDateRange" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">titleDateRanges</label>
+	<input type="text" value="nights" class="ci_co_titleDateRanges form-control">
+	<input type="checkbox" name="titleDateRanges" class="checkbox">
+	<label for="titleDateRanges" class="checkbox-label"></label>
+</div>
+
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">titleToday</label>
+	<input type="text" value="Today" class="ci_co_titleToday form-control">
+	<input type="checkbox" name="titleToday" class="checkbox">
+	<label for="titleToday" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">titleDays</label>
+	<input type="text" value="Mo, Tu, We, Th, Fr, Sa, Su" class="ci_co_titleDays form-control">
+	<input type="checkbox" name="titleDays" class="checkbox">
+	<label for="titleDays" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">titleMonths</label>
+	<input type="text" value="January, February, March, April, May,
+  June, July, August, Septemper, October, November, December" class="ci_co_titleMonths form-control">
+  	<input type="checkbox" name="titleMonths" class="checkbox">
+	<label for="titleMonths" class="checkbox-label"></label>
+</div>
+
+<div class="form-group">
+	<label class="form-label">titleMonthsLimitShow</label>
+	<input type="text" value="3" class="ci_co_titleMonthsLimitShow form-control">
+	<input type="checkbox" name="titleMonthsLimitShow" class="checkbox">
+	<label for="titleMonthsLimitShow" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">replaceTitleMonths</label>
+	<input type="text" value="" placeholder="Use space reset number" class="ci_co_replaceTitleMonths form-control">
+	<input type="checkbox" name="replaceTitleMonths" class="checkbox">
+	<label for="replaceTitleMonths" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">showDateTheme</label>
+	<input type="text" value="dd-mm-yy" class="ci_co_showDateTheme form-control">
+	<input type="checkbox" name="showDateTheme" class="checkbox">
+	<label for="showDateTheme" class="checkbox-label"></label>
+</div>
+<!-- // Icon -->
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">iconArrowTop</label>
+	<input type="text" value="true" class="ci_co_iconArrowTop form-control">
+	<input type="checkbox" name="iconArrowTop" class="checkbox">
+	<label for="iconArrowTop" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">iconDate</label>
+	<input type="text" value='<i class="fa fa-calendar"></i>' class="ci_co_iconDate form-control">
+	<!-- <input type="text" value="➜" class="ci_co_iDate form-control"> -->
+
+	<input type="checkbox" name="iconDate" class="checkbox">
+	<label for="iconDate" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-r-5">
+	<label class="form-label">arrowPrev</label>
+	<input type="text" value="❮" class="ci_co_arrowPrev form-control">
+	<input type="checkbox" name="arrowPrev" class="checkbox">
+	<label for="arrowPrev" class="checkbox-label"></label>
+</div>
+<div class="form-group form-group-2col pd-l-5">
+	<label class="form-label">arrowNext</label>
+	<input type="text" value="❯" class="ci_co_arrowNext form-control">
+	<input type="checkbox" name="arrowNext" class="checkbox">
+	<label for="arrowNext" class="checkbox-label"></label>
+</div>
+<p class="mg-t-0">
+	<small>
+		<a rel="nofollow" href="https://fontawesome.com/v4.7.0/">fontawesome</a> or <a rel="nofollow" target="_blank" href="https://www.w3schools.com/charsets/ref_utf_dingbats.asp">dingbats</a>
+	</small>
+</p>
+
+<div class="form-group">
+	<label class="form-label">toDayShowTitle</label>
+	<input type="text" value="true" class="ci_co_toDayShowTitle form-control">
+	<input type="checkbox" name="toDayShowTitle" class="checkbox">
+	<label for="toDayShowTitle" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">dateRangesShowTitle</label>
+	<input type="text" value="true" class="ci_co_dateRangesShowTitle form-control">
+	<input type="checkbox" name="dateRangesShowTitle" class="checkbox">
+	<label for="dateRangesShowTitle" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">toDayHighlighted</label>
+	<input type="text" value="false" class="ci_co_toDayHighlighted form-control">
+	<input type="checkbox" name="toDayHighlighted" class="checkbox">
+	<label for="toDayHighlighted" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">nextDayHighlighted</label>
+	<input type="text" value="false" class="ci_co_nextDayHighlighted form-control">
+	<input type="checkbox" name="nextDayHighlighted" class="checkbox">
+	<label for="nextDayHighlighted" class="checkbox-label"></label>
+</div>
+<div class="form-group">
+	<label class="form-label">daysOfWeekHighlighted</label>
+	<input type="text" value='0,6' class="ci_co_daysOfWeekHighlighted form-control">
+	<input type="checkbox" name="daysOfWeekHighlighted" class="checkbox">
+	<label for="daysOfWeekHighlighted" class="checkbox-label"></label>
+</div>
+
+
+
+
+
+				</div>
+				<button class="btn-update btn btn-main">Update</button>
+			</div>
+			
+			<div class="container-content animate">
+				<div class="t-datepicker t-show-1">
+				  <div class="t-check-in"></div>
+				  <div class="t-check-out"></div>
+				</div>
+				<button class="btn-update btn btn-main">Update</button>
+				<button class="btn-getdate btn btn-main">Show methods getDate</button>
+			
+
+				<div class="amp_demo">
+				<p>Show options when you have clicked checkbox in siderbar</p>
+			<div class="amp_pre amp_pre_default"><pre class="amp_pre_wrap"> ...
+  autoClose: 'false',
+ ...</pre></div>
+ 				</div>
+ 			</div>
+
+			<!-- <div class="container-content">
+				<div class="t-datepicker t-show-2" style="margin-top: 400px">
+				  <div class="t-check-in"></div>
+				  <div class="t-check-out"></div>
+				</div>
+			</div> -->
+
+			<!-- <button class="btn btn-main btn-click" id="click">btn</button>
+			<button class="btn btn-main btn-click" id="click_1">btn_1</button> -->
+			<div class="box-getdate">
+	<button class="btn btn-close"></button>
+	<button class="btn btn-main btn-get-date">getDate</button>
+	<button class="btn btn-main btn-get-date">getDates</button>
+
+	<button class="btn btn-main btn-get-date">getDateInput</button>
+	<button class="btn btn-main btn-get-date">getDateInputs</button>
+
+	<button class="btn btn-main btn-get-date">getDateUTC</button>
+	<button class="btn btn-main btn-get-date">getDateUTCs</button>
+
+	<button class="btn btn-main btn-get-date">getStartDate</button>
+	<button class="btn btn-main btn-get-date">getStartDateUTC</button>
+
+	<button class="btn btn-main btn-get-date">getEndDate</button>
+	<button class="btn btn-main btn-get-date">getEndDateUTC</button>
+</div>
+<script type="text/javascript">
+	$(document).ready( function() {
+		// Show hide box getDate
+		$('.btn-getdate').on('click', function(){
+			$(this).addClass('disabled')
+			$('.box-getdate').animate({
+				'bottom': 0
+			}, 300)
+		})
+		$('.btn-close').on('click', function() {
+			if ( $(this).parents('.box-getdate').hasClass('box-getdate') ) {
+				$(this).parent().animate({
+					'bottom': -350+'px'
+				}, 300)
+				$('.btn-getdate').removeClass('disabled')
+			}
+		})
+
+		// Append alert show data date
+		function alert_show_getDate(pr_text) {
+			$('body').append('<div class="box-alert-show-getDate"><button class="btn btn-close"></button><p class="content">'+pr_text+'<p><div class="progress"><div class="progress-bars"></div></div>')
+			$('.box-alert-show-getDate').animate({
+				// 'right' : 15+'px'
+				'opacity' : 1
+			}, 300);
+		}
+		function data_getDate(pr_data) {
+			// console.log(pr_data)
+			if ( pr_data === null ) {
+				return pr_data;
+			} else {
+				if ( pr_data.length > 1 && pr_data.length !== 10 ) {
+					if ( pr_data[0] !== null && pr_data[1] === null ) {
+						if ( typeof(pr_data[0]) === 'string' ) {
+							return pr_data = '[\"'+pr_data[0]+'\"\, '+null+']'
+						}
+						return pr_data = '['+pr_data+' '+null+']'
+					}
+					if ( pr_data[0] === null ) {
+						return pr_data = '['+null+',\ '+null+']'
+					} else if ( typeof(pr_data[0]) !== 'string') {
+						pr_data = pr_data.toString()
+						pr_data = pr_data.replace(/,/g, ',\ ')
+						return pr_data = '['+pr_data+']'
+					} else {
+						pr_data = pr_data.toString()
+						pr_data = pr_data.replace(/,/g, '\",\ \"')
+						return pr_data = '[\"'+pr_data+'\"]'
+					}
+				}
+				return pr_data;
+			}
+		}
+
+		function hide_data_getDate() {
+			var a = $('.box-alert-show-getDate');
+			var b = 10000;
+			$('.progress-bars').animate({
+				'width' : 0
+			}, b, function(){
+				a.remove()
+			});
+		}
+		
+		$('.btn-get-date').on('click', function(){
+			$('.box-alert-show-getDate').animate({
+				'opacity' : 0
+			}, 300);
+			var getDate = $('.t-datepicker').tDatePicker($(this).text())
+			setTimeout(function(){
+				$('.box-alert-show-getDate').remove()
+				getDate = data_getDate(getDate)
+				alert_show_getDate(getDate)
+				hide_data_getDate()
+				$('.btn-close').on('click', function() {
+					if ( $(this).parents('.box-alert-show-getDate').hasClass('box-alert-show-getDate') ) {
+						$(this).parent().animate({
+							'opacity': 0
+						}, 300)
+						setTimeout(function(){
+							$('.box-alert-show-getDate').remove()
+						}, 300)
+					}
+				})
+			}, 300)
+		})
+	})
+</script>
+			
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		if ( $('#ps_scroll').length !== 0 ) {
+			// Scroll sidebar
+			var ps = new PerfectScrollbar('#ps_scroll', {
+				maxScrollbarLength: 25
+			});
+		}
+		if ( $('.amp_pre_wrap').length !== 0 ) {
+			var this_a = document.getElementsByClassName('amp_pre_wrap');
+			var this_a = [].slice.call(this_a)
+			// console.log(this_a)
+			this_a.forEach(function(e){
+				var ps = new PerfectScrollbar(e, {
+					maxScrollbarLength: 50
+				});
+			})
+		}
+	})
+</script>
+		</div>
+		<!-- ./container-right -->
+	</div>
+	<script type="text/javascript">
+		$(document).ready( function() {
+			function checkNum(pr_el, pr_num) {
+				if ( isNaN(pr_num) ) {
+					$(pr_el).addClass('error')
+				} else {
+					$(pr_el).removeClass('error')
+					return Number(pr_num)
+				}
+			}
+			function checkBolean(pr_bl) {
+				if ( pr_bl === 'true' ) {
+					return true
+				}
+				return false
+			}
+			function checkArray(pr_items) {
+				var a = [];
+				var pr_items = pr_items.split(',')
+				pr_items.forEach(function(e){
+					e = e.trim()
+					a.push(e)
+				})
+				return a;
+			}
+			function show_amp_demo(pr_show_hide) {
+				// Check mobile no run
+				if ( 'ontouchstart' in window === false ) {
+					if ( pr_show_hide === 'show' ) {
+						$('.amp_demo').css({
+							'top': $('.amp_demo').position().top+'px',
+							'left': $('.amp_demo').position().left+'px',
+							'opacity': 0,
+						}).animate({
+							'opacity': 1,
+							'top': 90+'px',
+							'height': 80+'%',
+						}, 300).css({
+							'width': 350+'px',
+							'position': 'fixed',
+							'left': $('.footer').position().left+$('.footer').width()-80+'px',
+						})
+					}
+					if ( pr_show_hide === 'hide' ) {
+						$('.amp_demo').css({
+							'top': 0,
+							'left': 0,
+							'height': 'auto',
+							'width': 100+'%',
+							'opacity': 0,
+							'position': 'relative',
+						}).animate({
+							'opacity': 1,
+						}, 300)
+					}
+				}
+			}
+
+			// Call Action toggle library
+			var d = new Date()
+			var ci_demo = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() + 5)
+			var co_demo = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() + 15)
+			$(".t-datepicker").tDatePicker({
+				dateCheckIn: ci_demo,
+				dateCheckOut: co_demo
+			})
+			.on('toggleAfterHideDay', function(){
+				show_amp_demo('hide') // box js content copy
+			}).on('afterCheckOut', function(){
+				show_amp_demo('hide') // box js content copy
+			})
+			$(".t-datepicker").tDatePicker('show')
+
+			// Call Click update event button
+			$('.btn-update').on('click', function(){
+				// box js content copy
+				show_amp_demo('show')
+
+				// Action
+				var autoC = $('.ci_co_autoClose').val() || false
+				autoC = checkBolean(autoC)
+				var Duration = $('.ci_co_durationArrowTop').val() || 200
+				Duration = checkNum('.ci_co_durationArrowTop', Duration)
+
+				// Format
+				var FM = $('.ci_co_formatDate').val() || 'yyyy-mm-dd'
+
+				// date
+				var CI = $('.ci_co_dateCheckIn').val() || null
+				var CO = $('.ci_co_dateCheckOut').val() || null
+				var startD = $('.ci_co_startDate').val() || null
+				var endD = $('.ci_co_endDate').val() || null
+				var limitPrev = $('.ci_co_limitPrevMonth').val() || 0
+				limitPrev = checkNum('.ci_co_limitPrevMonth', limitPrev)
+				
+				var limitNext = $('.ci_co_limitNextMonth').val() || 11
+				limitNext = checkNum('.ci_co_limitNextMonth', limitNext)
+
+				var limitDateRan = $('.ci_co_limitDateRanges').val() || 31
+				limitDateRan = checkNum('.ci_co_limitDateRanges', limitDateRan)
+
+				var showFullDateRan = $('.ci_co_showFullDateRanges').val() || false
+				showFullDateRan = checkBolean('.ci_co_showFullDateRanges' ,showFullDateRan)
+
+				// fnDateEvent
+				var DataE = $('.ci_co_fnDataEvent').val() || null
+				if ( DataE === null ) { 
+					$('.ci_co_fnDataEvent').addClass('error')
+				} else {
+					$('.ci_co_fnDataEvent').removeClass('error')
+				}
+				var obDataE = {};
+				DataE = DataE.split(',')
+				DataE.forEach(function(e){
+					e = e.toString()
+					e = e.replace('\n','')
+					var a = e.slice(0, e.indexOf(':'))
+					a = a.trim()
+					a = a.replace(/\'/g, '')
+					var b = e.slice(e.indexOf(':') + 1, e.length);
+					b = b.trim()
+					b = b.replace(/\'/g, '')
+					obDataE[a] = b;
+				})
+
+				// Theme
+				var numCalen = $('.ci_co_numCalendar').val() || 2
+				numCalen = checkNum('.ci_co_numCalendar', numCalen)
+
+				var ci_co_titleCI   = $('.ci_co_titleCI').val()
+				var ci_co_titleCO   = $('.ci_co_titleCO').val()
+				var ci_co_titleDRa  = $('.ci_co_titleDateRange').val()
+				var ci_co_titleDRas = $('.ci_co_titleDateRanges').val()
+				var ci_co_toDay     = $('.ci_co_titleToday').val()
+
+				var ci_co_Days      = $('.ci_co_titleDays').val()
+				ci_co_Days = checkArray(ci_co_Days)
+				var ci_co_Months    = $('.ci_co_titleMonths').val()
+				ci_co_Months = checkArray(ci_co_Months)
+				var ci_co_M_LimitShow = $('.ci_co_titleMonthsLimitShow').val() || 3
+				ci_co_M_LimitShow = checkNum('.ci_co_titleMonthsLimitShow', ci_co_M_LimitShow)
+
+				var ci_co_M_Replace = $('.ci_co_replaceTitleMonths').val() || null
+				var ci_co_showDateTheme = $('.ci_co_showDateTheme').val() || null
+
+				// Icon theme
+				var ci_co_iTop = $('.ci_co_iconArrowTop').val() || true
+				ci_co_iTop = checkBolean(ci_co_iTop)
+				var ci_co_iDate = $('.ci_co_iconDate').val() || '<i class="fa fa-calendar"></i>'
+				var ci_co_aP = $('.ci_co_arrowPrev').val() || '<i class="fa fa-chevron-left"></i>'
+				var ci_co_aN = $('.ci_co_arrowNext').val() || '<i class="fa fa-chevron-right"></i>'
+
+				// Title theme
+				var ci_co_sTitle = $('.ci_co_toDayShowTitle').val() || 'Today'
+				var ci_co_Range_sTitle = $('.ci_co_dateRangesShowTitle').val() || true
+				ci_co_Range_sTitle = checkBolean(ci_co_Range_sTitle)
+				var ci_co_toDay_hl = $('.ci_co_toDayHighlighted').val() || false
+				ci_co_toDay_hl = checkBolean(ci_co_toDay_hl)
+				var ci_co_nextDay_hl = $('.ci_co_nextDayHighlighted').val() || false
+				ci_co_nextDay_hl = checkBolean(ci_co_nextDay_hl)
+				var ci_co_DayOfW = $('.ci_co_daysOfWeekHighlighted').val() || [0,6]
+				ci_co_DayOfW = checkArray(ci_co_DayOfW)
+
+
+				var Object_Global = {}
+				presentText(Object_Global)
+				function presentText(pr_ob) {
+					var ip = '[checked="checked"]';
+					var arrayNameOptions = [ 
+						// Action
+						'autoClose',
+						'durationArrowTop',
+						// Format
+						'formatDate',
+
+						'dateCheckIn',
+						'dateCheckOut',
+						'startDate',
+						'endDate',
+						'limitPrevMonth',
+						'limitNextMonth',
+						'limitDateRanges',
+
+						'fnDataEvent',
+						'showFullDateRanges',
+
+						// Theme
+						'numCalendar',
+						'titleCI',
+						'titleCO',
+						'titleDateRange',
+						'titleDateRanges',
+						'titleToday',
+						'titleDays',
+						'titleMonths',
+						'titleMonthsLimitShow',
+						'replaceTitleMonths',
+						'showDateTheme',
+
+						// Icons
+						'iconArrowTop',
+						'iconDate',
+						'arrowPrev',
+						'arrowNext',
+
+						// Active date
+						'toDayShowTitle',
+						'dateRangesShowTitle',
+						'toDayHighlighted',
+						'nextDayHighlighted',
+						'daysOfWeekHighlighted'
+					]
+					arrayNameOptions.forEach(function(e){
+						if ( $('.ci_co_'+e).parent().find(ip).length === 1 ) {
+							pr_ob[e] = $('.ci_co_'+e).val()+'tuds';
+							if ( e === 'fnDataEvent' ) {
+								pr_ob[e] = '{'+$('.ci_co_'+e).val()+'}tuds'
+							}
+							if ( e === 'titleDays' ) {
+								pr_ob[e] = ci_co_Days
+							}
+							if ( e === 'titleMonths' ) {
+								pr_ob[e] = ci_co_Months
+							}
+							if ( e === 'daysOfWeekHighlighted' ) {
+								pr_ob[e] = ci_co_DayOfW
+							}
+						}
+					})
+					// console.log(pr_ob)
+					pr_ob = JSON.stringify(pr_ob)
+					pr_ob = pr_ob.replace(/tuds\"\,/g, '\"\,\n\ \ ');
+					pr_ob = pr_ob.replace(/tuds/g, '');
+					pr_ob = pr_ob.replace(/],/g, '],\n\ \ ');
+					pr_ob = pr_ob.replace(/\"/g, '\'');
+					pr_ob = pr_ob.replace(/\\\'/g, '\"');
+					pr_ob = pr_ob.replace(/\\n/g, '\n\ \ \ \ ');
+					pr_ob = pr_ob.replace(/\'{/g, '{\n\ \ \ \ ');
+					pr_ob = pr_ob.replace(/\ \ \\t}\'/g, '}');
+					
+					var text = '$(\'.t-datepicker\').tDatepicker('+pr_ob+')'
+					text = text.replace(/\(\{/g, '\(\{\n\ \ ');
+					text = text.replace(/\}\)/g, '\n\}\)');
+					$('.amp_pre_wrap').text(text)
+					return pr_ob;
+				}
+
+				
+
+				$(".t-show-1").tDatePicker({
+					// Action
+					autoClose  : autoC,
+					durationArrowTop  : Duration,
+
+					// Format
+					formatDate   : FM,
+
+					// Date
+					dateCheckIn  : CI,
+					dateCheckOut : CO,
+					startDate    : startD,
+					endDate      : endD,
+					limitPrevMonth : limitPrev,
+					limitNextMonth : limitNext,
+					limitDateRanges : limitDateRan,
+					showFullDateRanges : showFullDateRan,
+					fnDataEvent : obDataE,
+
+					// theme
+					numCalendar     : numCalen,
+
+					titleCI         : ci_co_titleCI,
+					titleCO         : ci_co_titleCO,
+					titleDateRange  : ci_co_titleDRa,
+					titleDateRanges : ci_co_titleDRa,
+
+					titleToday      : ci_co_toDay,
+					titleDays       : ci_co_Days,
+					titleMonths     : ci_co_Months,
+
+					titleMonthsLimitShow : ci_co_M_LimitShow,
+					replaceTitleMonths   : ci_co_M_Replace,
+					showDateTheme        : ci_co_showDateTheme,
+
+					iconArrowTop   : ci_co_iTop,
+					iconDate       : ci_co_iDate,
+					arrowPrev      : ci_co_aP,
+					arrowNext      : ci_co_aN,
+					toDayShowTitle : ci_co_sTitle,
+					dateRangesShowTitle : ci_co_Range_sTitle,
+					toDayHighlighted    : ci_co_toDay_hl,
+					nextDayHighlighted  : ci_co_nextDay_hl,
+					daysOfWeekHighlighted: ci_co_DayOfW,
+				})
+				$(".t-show-1").tDatePicker('show')
+			});
+			// .btn-update
+
+			// Target body hide calendar run animate box js content
+			$('html').on('click', function(e) {
+		        // console.log('html')
+				setTimeout( function() {
+	    			// Chờ class t-datepicker-open được khởi tạo ở method 'show'
+	                if ( $(e.target).parents('.t-datepicker').hasClass('t-datepicker') === true 
+	                    && $('.t-datepicker-day').length > 0 ) {
+	                	// box js content copy
+	                	show_amp_demo('show')
+	                }
+	                if ( $(e.target).parents('.t-datepicker').hasClass('t-datepicker') === false 
+	                    && $('.t-datepicker-day').length === 0
+	                    && $(e.target).hasClass('btn-update') === false 
+	                    && $('.amp_demo').css('opacity') !== '1' ) {
+	                	// box js content copy
+	                	show_amp_demo('hide')
+	                }
+	            },1)
+		    });
+
+		    $('.select-cbox').on('click', function(){
+		    	if ( $(this).text() === 'Select All' ) {
+		    		$('.checkbox').attr('checked', 'checked')
+		    	} else {
+		    		$('.checkbox').removeAttr('checked')
+		    	}
+		    })
+		    $('.checkbox').on('click', function(){
+		    	if ( $(this).attr('checked') === 'checked' ) {
+		    		$(this).removeAttr('checked')
+		    	} else {
+		    		$(this).attr('checked', 'checked')
+		    	}
+		    })
+		})
+	</script>
+	</div>
+	
+</body>
+</html>

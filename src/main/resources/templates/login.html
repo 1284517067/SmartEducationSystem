@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/jquery-3.5.1.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.js">  </script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/action.js"></script>
+    <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.css">
+    <!--jQuery校验  -->
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    </head>
+
+<body>
+<div id="head" th:insert="../templates/headNavbar::header"></div>
+<div class="login-background">
+<div class="container-fluid">
+    <br>
+    <div class="card login-card offset-xl-8">
+        <div class="card-body">
+            <form action="/login/submit" method="post">
+                <div class="form-group">
+                    <label for="username" class="font-weight-bold text-white">用户名：</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" id="username" name="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="text-white font-weight-bold">密码：</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><span class="fa fa-address-card"></span> </span>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-inline">
+                        <input type="radio" name="radio" id="student" value="student">&nbsp;学生&nbsp;
+                        <input type="radio" name="radio" id="teacher" value="teacher">&nbsp;老师&nbsp;
+                        <input type="radio" name="radio" id="admin" value="admin">&nbsp;管理员
+                    </div>
+                </div>
+                <div class="form-group mx-auto ">
+                    <input type="submit" class="btn btn-light col-5 offset-xl-1" value="登录">
+                    <a type="button" class="btn btn-light col-5" href="/register">注册</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br><br>
+    <div th:insert="../templates/footer::footer"></div>
+</div>
+</div>
+</body>
+</html>

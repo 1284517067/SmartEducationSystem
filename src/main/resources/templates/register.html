@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--suppress ALL-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/jquery-3.5.1.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.js">  </script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/action.js"></script>
+    <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.css">
+    <!--jQuery校验  -->
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    </head>
+<body>
+<script>
+</script>
+<div id="head" th:insert="../templates/headNavbar::header"></div>
+<div class="container-fluid">
+    <br>
+    <div class="container row">
+        <div class="card justify-content-center col-7 offset-xl-5">
+            <div class="card-header bg-white mx-auto">
+                <h5 class="font-weight-bold lead">学生注册</h5>
+            </div>
+            <div class="card-body">
+                <form action="/register/submit" method="post" class="mx-auto">
+                    <div class="container">
+                        <div class="form-group">
+                            <label for="school">学校：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-graduation-cap"></span> </span>
+                                <input type="text" class="form-control" id="school" name="school">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stuId">姓名：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-user"></span></span>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stuId">学号：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-user"></span></span>
+                                <input type="text" class="form-control" id="stuId" name="stuId">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">密码：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-key"></span> </span>
+                                <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm">确认密码：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-check-square-o"></span></span>
+                                <input type="password" class="form-control" id="confirm" name="confirm">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stuId">院系：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-mortar-board"></span></span>
+                                <input type="text" class="form-control" id="department" name="department">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stuId">专业：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-tag"></span></span>
+                                <input type="text" class="form-control" id="major" name="major">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stuId">班级：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-user"></span></span>
+                                <input type="text" class="form-control" id="classes" name="classes">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="stuId">电话号码：</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="fa fa-phone"></span></span>
+                                <input type="tel" class="form-control" id="tel" name="tel">
+                            </div>
+                        </div>
+                        <div class="mx-auto">
+                            <div class="form-inline">
+                                <input type="submit" class="btn btn-light col-4 offset-2" value="提交">&nbsp;&nbsp;&nbsp;
+                                <input type="reset" class="btn btn-light col-4" value="重置">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br>
+<div th:insert="../templates/footer::footer"></div>
+</body>
+</html>
